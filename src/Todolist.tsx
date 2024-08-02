@@ -1,4 +1,4 @@
-import {TaskType} from "./App";
+import {FilterType, TaskType} from "./App";
 import {Button} from "./Button";
 import {Input} from "./Input";
 import {FullInput} from "./FullInput";
@@ -10,9 +10,7 @@ type PropsType = {
     isDoneCheck: (id: string, checked: boolean) => void
     addTask: (title: string) => void
     deleteTask: (id: string) => void
-    activeTasksChecked: () => void
-    completedTasksChecked: () => void
-    allTasksChecked: () => void
+    changeFilter: (filt: FilterType) => void
 }
 
 export const Todolist = (props: PropsType) => {
@@ -26,6 +24,10 @@ export const Todolist = (props: PropsType) => {
 
     const setTitleHandler = (title: string) => {
         setCurrentTitle(title);
+    }
+
+    const changeFilterHandler = (filter: FilterType) => {
+        props.changeFilter(filter);
     }
 
     return (
@@ -50,9 +52,9 @@ export const Todolist = (props: PropsType) => {
                     </ul>
             }
             <div>
-                <Button title={'All'} callBack={props.allTasksChecked}/>
-                <Button title={'Active'} callBack={props.activeTasksChecked}/>
-                <Button title={'Completed'} callBack={props.completedTasksChecked}/>
+                <Button title={'All'} callBack={() => changeFilterHandler('All')}/>
+                <Button title={'Active'} callBack={() => changeFilterHandler(false)}/>
+                <Button title={'Completed'} callBack={() => changeFilterHandler(true)}/>
             </div>
         </div>
     )
