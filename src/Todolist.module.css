@@ -1,0 +1,15 @@
+.errorInput {
+    outline: red solid 1px;
+}
+
+.errorText {
+    color: red;
+}
+
+.completed {
+    opacity: 50%;
+}
+
+.activeFilter {
+    background: aqua;
+}

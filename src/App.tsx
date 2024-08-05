@@ -25,14 +25,12 @@ function App() {
     let [currentFilter, setCurrentFilter] = useState<FilterType>("All");
 
     const taskIsDone = (id: string, checked: boolean) => {
-        let checkedTasks = currentTask.map(t => {
-            if (t.id === id) {
-                t.isDone = checked;
-            }
-            return t
-        });
-        console.log(checkedTasks);
-        setCurrentTask(checkedTasks);
+        let checkedTask = currentTask.find(t =>
+            t.id === id);
+        if (checkedTask) {
+            checkedTask.isDone = checked
+        }
+        setCurrentTask([...currentTask]);
     }
 
     const addTask = (title: string) => {
@@ -62,6 +60,7 @@ function App() {
                       addTask={addTask}
                       deleteTask={deleteTask}
                       changeFilter={changeFilter}
+                      filter={currentFilter}
             />
         </div>
     );

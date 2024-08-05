@@ -1,10 +1,12 @@
+import {ButtonHTMLAttributes} from "react";
+
 type ButtonPropsType = {
 	title: string
 	callBack?: () => void
-}
+} & ButtonHTMLAttributes<HTMLButtonElement>
 
 export const Button = (props: ButtonPropsType) => {
 	return (
-		<button onClick={props.callBack}>{props.title}</button>
+		<button className={props.className} onClick={props.callBack}>{props.title}</button>
 	)
 }
