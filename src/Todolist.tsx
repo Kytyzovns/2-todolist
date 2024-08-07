@@ -2,7 +2,7 @@ import {FilterType, TaskType} from "./App";
 import {Button} from "./Button";
 import {Input} from "./Input";
 import {FullInput} from "./FullInput";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import s from "./Todolist.module.css";
 
 type PropsType = {
@@ -12,13 +12,13 @@ type PropsType = {
     addTask: (title: string) => void
     deleteTask: (id: string) => void
     changeFilter: (filt: FilterType) => void
-    filter: FilterType;
 }
 
 export const Todolist = (props: PropsType) => {
 
     let [currentTitle, setCurrentTitle] = useState<string>('');
     let [error, setError] = useState<string | null>(null);
+    let filter1 = useRef<FilterType>("All");
     const addTaskHandler = () => {
         if (!currentTitle.trim()) {
             setError("required field")
@@ -35,6 +35,7 @@ export const Todolist = (props: PropsType) => {
 
     const changeFilterHandler = (filter: FilterType) => {
         props.changeFilter(filter);
+        filter1.current = filter;
     }
 
     return (
@@ -63,9 +64,9 @@ export const Todolist = (props: PropsType) => {
                     </ul>
             }
             <div>
-                <Button className={props.filter==="All"? s.activeFilter : ""} title={'All'} callBack={() => changeFilterHandler('All')}/>
-                <Button className={props.filter===false? s.activeFilter : ""} title={'Active'} callBack={() => changeFilterHandler(false)}/>
-                <Button className={props.filter===true? s.activeFilter : ""} title={'Completed'} callBack={() => changeFilterHandler(true)}/>
+                <Button className={filter1.current==="All"? s.activeFilter : ""} title={'All'} callBack={() => changeFilterHandler('All')}/>
+                <Button className={filter1.current===false? s.activeFilter : ""} title={'Active'} callBack={() => changeFilterHandler(false)}/>
+                <Button className={filter1.current===true? s.activeFilter : ""} title={'Completed'} callBack={() => changeFilterHandler(true)}/>
             </div>
         </div>
     )
