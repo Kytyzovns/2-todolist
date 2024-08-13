@@ -1,65 +1,54 @@
+import React, {useState} from 'react';
 import './App.css';
-import {Todolist} from "./Todolist";
-import {useRef, useState} from "react";
+import {Country} from "./Country";
 import {v1} from "uuid";
 
-export type TaskType = {
+export type BanknotsType = 'USD' | 'RUB' | 'All'
+export type MoneyType = {
+    banknote: BanknotsType
+    nominal: number
     id: string
-    title: string
-    isDone: boolean
 }
 
-export type FilterType = "All" | false | true
+let defaultMoney: MoneyType[] = [
+    {banknote: 'USD', nominal: 100, id: v1()},
+    {banknote: 'USD', nominal: 100, id: v1()},
+    {banknote: 'RUB', nominal: 100, id: v1()},
+    {banknote: 'USD', nominal: 100, id: v1()},
+    {banknote: 'USD', nominal: 100, id: v1()},
+    {banknote: 'RUB', nominal: 100, id: v1()},
+    {banknote: 'USD', nominal: 100, id: v1()},
+    {banknote: 'RUB', nominal: 100, id: v1()},
+]
+
+export const moneyFilter = (money: MoneyType[], filter: BanknotsType): MoneyType[] => {
+    if (filter === 'All') return money
+    return money.filter(m => m.banknote === filter)
+}
+
 
 function App() {
-    const tasks1: Array<TaskType> = [
-        {id: v1(), title: 'HTML&CSS', isDone: true},
-        {id: v1(), title: 'JS', isDone: true},
-        {id: v1(), title: 'ReactJS', isDone: false},
-        {id: v1(), title: 'Redux', isDone: false},
-        {id: v1(), title: 'Typescript', isDone: false},
-        {id: v1(), title: 'RTK query', isDone: false},
-    ]
+    const [money, setMoney] = useState<MoneyType[]>(defaultMoney)
+    const [filterValue, setFilterValue] = useState<BanknotsType>('All')   // по умолчанию указываем все банкноты
 
-    let [currentTask, setCurrentTask] = useState<Array<TaskType>>(tasks1);
-    let [currentFilter, setCurrentFilter] = useState<FilterType>("All");
 
-    const taskIsDone = (id: string, checked: boolean) => {
-        let checkedTask = currentTask.find(t =>
-            t.id === id);
-        if (checkedTask) {
-            checkedTask.isDone = checked
-        }
-        setCurrentTask([...currentTask]);
+    const filteredMoney = moneyFilter(money, filterValue)
+    const addMoney = (banknote: BanknotsType) => {
+        // Добавление денег сделаем в последнюю очередь, после настройки фильтров и отрисовки денег
     }
-
-    const addTask = (title: string) => {
-        let newTasks = [{id: v1(), title: title, isDone: false}, ...currentTask];
-        setCurrentTask(newTasks);
+    const removeMoney = (banknote: BanknotsType) => {
+        // Снятие денег сделаем в последнюю очередь, после настройки фильтров и отрисовки денег
+        // const index = money.findIndex
+        //  if (index !== -1) {
+        //      setMoney(money.filter((el, i) => ...));
+        //  }
     }
-
-    const deleteTask = (id: string) => {
-        let filteredTasks: Array<TaskType> = currentTask.filter(t => t.id !== id);
-        setCurrentTask(filteredTasks);
-    }
-
-
-    const changeFilter = (filt: FilterType) => {
-        setCurrentFilter(filt);
-    }
-
-    let resultTasks: Array<TaskType> = currentTask.filter(t =>
-        currentFilter === "All" ? t : t.isDone === currentFilter
-    )
-
+    console.log(filteredMoney)
     return (
         <div className="App">
-            <Todolist title="What to learn"
-                      tasks={resultTasks}
-                      isDoneCheck={taskIsDone}
-                      addTask={addTask}
-                      deleteTask={deleteTask}
-                      changeFilter={changeFilter}
+            <Country
+                data={filteredMoney}   //отрисовать будем деньги после фильтрации
+                setFilterValue={setFilterValue}  //useState передаем? Так можно было?!
             />
         </div>
     );
